@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, react/no-unescaped-entities */
 // app/api/checkout/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { stripe } from '@/lib/stripe';
 
 export const config = {
-  runtime: 'edge', // for Cloudflare Workers
+  runtime: 'nodejs',
 };
 
-export async function POST(req: NextRequest, context: { env: { STRIPE_SECRET_KEY: string } }) {
-  const { priceId } = await req.json();
+export async function POST(req: NextRequest) {
+  const { priceId, productId } = await req.json();
 
   if (!priceId) {
     return NextResponse.json({ error: 'Missing priceId' }, { status: 400 });
   }
-
-  const stripe = new Stripe(context.env.STRIPE_SECRET_KEY);
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -35,3 +33,4 @@ export async function POST(req: NextRequest, context: { env: { STRIPE_SECRET_KEY
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+

@@ -2,16 +2,13 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
 export const config = {
-  runtime: 'edge', // MUST be edge for Cloudflare Workers
+  runtime: 'nodejs',
 };
 
-export async function POST(
-  req: Request,
-  context: { env: { RESEND_API_KEY: string } }
-) {
-  const { to, orderId, productName, priceId } = await req.json();
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  const resend = new Resend(context.env.RESEND_API_KEY);
+export async function POST(req: Request) {
+  const { to, orderId, productName, priceId } = await req.json();
 
   try {
     const data = await resend.emails.send({
