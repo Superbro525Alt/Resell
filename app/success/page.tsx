@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '@/lib/firebase';
-import { get, ref, push, serverTimestamp, child } from 'firebase/database';
+import { get, ref, push, serverTimestamp, child, set } from 'firebase/database';
 import { CheckCircleIcon } from 'lucide-react';
 
 export default function SuccessPage() {
@@ -39,20 +39,36 @@ export default function SuccessPage() {
     console.log(data);
 
     if (data?.productId && data?.priceId) {
-      await push(ref(db, `purchases/${user.uid}`), {
-        email: data.email,
-        productId: data.productId,
-        productName: data.productName,
-        priceId: data.priceId,
-        purchasedAt: serverTimestamp(),
-        resolved: false
-      });
+      const orderRef = push(ref(db, `purchases/${user.uid}`));
+const orderId = orderRef.key!;
+
+await set(orderRef, {
+  email: data.email,
+  productId: data.productId,
+  productName: data.productName,
+  priceId: data.priceId,
+  purchasedAt: serverTimestamp(),
+  resolved: false,
+});
+
 
       // Mark session as processed
       await push(ref(db, `processedSessions/${sessionId}`), {
         userId: user.uid,
         usedAt: serverTimestamp(),
       });
+
+      await fetch('/api/send-receipt', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    to: data.email,
+    orderId,
+    productName: data.productName,
+    priceId: data.priceId,
+  }),
+});
+
 
       setProductName(data.productName);
       setLogged(true);

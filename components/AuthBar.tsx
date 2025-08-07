@@ -27,6 +27,7 @@ type Order = {
   currency?: string;
   resolved: boolean;
   uid?: string;
+  email: string;
 };
 
 type Suggestion = {
@@ -144,7 +145,7 @@ export function Header() {
   if (!user) return null;
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 rounded-xl backdrop-blur-md bg-white/70 dark:bg-muted/60 border border-border shadow-md px-6 py-3 flex items-center gap-6 max-w-4xl w-full justify-between">
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 rounded-xl backdrop-blur-md bg-white/70 dark:bg-muted/60 border border-border shadow-md px-4 py-3 flex flex-col sm:flex-row flex-wrap sm:items-center gap-4 sm:gap-6 max-w-full sm:max-w-4xl w-[95%] sm:w-full justify-between">
       <div className="flex items-center gap-3">
         <Avatar className="w-8 h-8">
           <AvatarImage src={user.photoURL ?? undefined} />
@@ -156,7 +157,7 @@ export function Header() {
         </div>
       </div>
 
-      <div className='flex flex-row gap-5'>
+      <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 sm:gap-5">
 
         {/* Suggest Product Dialog */}
         <Dialog>
@@ -360,8 +361,9 @@ export function Header() {
                   {allOrders.map((o) => (
                     <div key={o.id} className="border p-2 rounded flex justify-between items-center text-sm">
                       <div>
-                        <p className="font-medium">{o.productName}</p>
-                        <p className="text-xs text-muted-foreground">{o.priceId}</p>
+                              <p className="font-medium text-gray-900">{o.productName}</p>
+        <p className="text-xs text-muted-foreground">{o.email}</p>
+        <p className="text-xs text-muted-foreground font-mono">{o.priceId}</p>
                       </div>
                       <Button size="sm" variant="outline" onClick={() => toggleOrderResolved(o.uid!, o.id, o.resolved)}>
                         Mark as {o.resolved ? 'Not Delivered' : 'Delivered'}
