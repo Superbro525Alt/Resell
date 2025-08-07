@@ -66,6 +66,7 @@ await set(orderRef, {
     orderId,
     productName: data.productName,
     priceId: data.priceId,
+
   }),
 });
 
