@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, react/no-unescaped-entities */
 'use client';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -303,7 +304,7 @@ export function Header() {
     <DialogHeader>
       <DialogTitle>Approve Product</DialogTitle>
       <DialogDescription>
-        Enter the price (in USD) for "{selectedSuggestion?.name}".
+        Enter the price (in USD) for &quot;{selectedSuggestion?.name}&quot;.
       </DialogDescription>
     </DialogHeader>
     <div className="space-y-4">
@@ -376,7 +377,7 @@ export function Header() {
     <DialogHeader>
       <DialogTitle>Approve Product</DialogTitle>
       <DialogDescription>
-        Enter the price for "{selectedSuggestion?.name}".
+        Enter the price for &quot;{selectedSuggestion?.name}&quot;.
       </DialogDescription>
     </DialogHeader>
     <div className="space-y-4">

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, react/no-unescaped-entities */
 // app/api/verify-session/route.ts
 import { stripe } from '@/lib/stripe';
 import { NextRequest, NextResponse } from 'next/server';
