@@ -3,6 +3,10 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 
+export const config = {
+  runtime: 'nodejs',
+};
+
 export async function GET() {
   try {
     const products = await stripe.products.list({ active: true });

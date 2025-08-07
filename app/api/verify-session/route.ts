@@ -3,6 +3,10 @@
 import { stripe } from '@/lib/stripe';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const config = {
+  runtime: 'nodejs',
+};
+
 export async function POST(req: NextRequest) {
   const { sessionId } = await req.json();
 
