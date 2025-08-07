@@ -3,6 +3,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 
+export const config = {
+  runtime: 'nodejs',
+};
+
 export async function POST(req: NextRequest) {
   const { priceId, productId } = await req.json();
 
