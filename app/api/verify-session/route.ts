@@ -1,18 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, react/no-unescaped-entities */
 // app/api/verify-session/route.ts
-import { stripe } from '@/lib/stripe';
 import { NextRequest, NextResponse } from 'next/server';
+import Stripe from 'stripe';
 
 export const config = {
-  runtime: 'nodejs',
+  runtime: 'edge', // must be 'edge' for Cloudflare Workers
 };
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  context: { env: { STRIPE_SECRET_KEY: string } }
+) {
   const { sessionId } = await req.json();
 
   if (!sessionId) {
     return NextResponse.json({ error: 'Missing sessionId' }, { status: 400 });
   }
+
+  const stripe = new Stripe(context.env.STRIPE_SECRET_KEY);
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
